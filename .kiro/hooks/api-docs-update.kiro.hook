@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "API Documentation Update",
+  "description": "Updates documentation when API-related files are modified to keep docs in sync",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*Controller.cs",
+      "*Models.cs",
+      "Program.cs",
+      "Startup.cs"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if the changes to the API files require updates to the README.md, API documentation, or example files. Update any relevant documentation to reflect the changes made to controllers, models, or API configuration."
+  }
+}

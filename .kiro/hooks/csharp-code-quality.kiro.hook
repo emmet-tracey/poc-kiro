@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "C# Code Quality Check",
+  "description": "Runs dotnet format and checks for linting issues when C# files are saved",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.cs"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Run `dotnet format` to format the code and `dotnet build` to check for any compilation or linting issues in the edited C# file. Fix any issues found."
+  }
+}
