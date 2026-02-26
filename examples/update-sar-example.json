@@ -1,0 +1,7 @@
+{
+  "suspicion": {
+    "description": "Updated investigation reveals additional suspicious patterns. Customer made similar transactions at multiple branch locations within the same week. Enhanced due diligence shows customer's business activities do not support the transaction volumes observed. Recommend immediate filing with FinCEN.",
+    "investigationNotes": "Follow-up investigation conducted on 2024-02-22. Reviewed 90-day transaction history and identified 8 additional transactions between $8,000-$9,900. Customer's stated occupation as retail clerk inconsistent with transaction pattern. No legitimate business purpose identified for the structured deposits."
+  },
+  "status": "Submitted"
+}

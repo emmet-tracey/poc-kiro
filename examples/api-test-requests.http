@@ -1,0 +1,85 @@
+### SAR API Test Requests
+### Replace {{baseUrl}} with your actual API Gateway URL
+
+@baseUrl = https://your-api-gateway-url.execute-api.us-east-1.amazonaws.com/Prod
+
+### Create a new SAR
+POST {{baseUrl}}/api/sar
+Content-Type: application/json
+
+{
+  "customer": {
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "dateOfBirth": "1990-05-20T00:00:00Z",
+    "socialSecurityNumber": "987-65-4321",
+    "address": {
+      "street": "456 Oak Avenue",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90210"
+    },
+    "phoneNumber": "555-987-6543",
+    "emailAddress": "jane.smith@email.com",
+    "accountNumber": "ACC987654321"
+  },
+  "transactions": [
+    {
+      "transactionId": "TXN003",
+      "transactionDate": "2024-02-25T10:30:00Z",
+      "amount": 25000.00,
+      "transactionType": "Wire Transfer",
+      "description": "Unusual large wire transfer to high-risk jurisdiction",
+      "counterpartyName": "Offshore Holdings Inc",
+      "counterpartyAccount": "123456789",
+      "counterpartyBank": "Caribbean International Bank"
+    }
+  ],
+  "suspicion": {
+    "primaryReason": "GeographicRisk",
+    "additionalReasons": ["HighValueTransaction"],
+    "description": "Customer initiated a large wire transfer to a bank in a high-risk jurisdiction with no apparent business relationship or legitimate purpose. Customer was unable to provide satisfactory explanation for the transaction when questioned.",
+    "investigationNotes": "Customer has no prior international transaction history. Amount represents 50% of account balance. Destination country is on FATF grey list."
+  }
+}
+
+### Get all SARs
+GET {{baseUrl}}/api/sar
+
+### Get SARs filtered by status
+GET {{baseUrl}}/api/sar?status=Draft&limit=5
+
+### Get SAR by ID (replace with actual ID from create response)
+GET {{baseUrl}}/api/sar/{{sarId}}
+
+### Update SAR (replace with actual ID)
+PUT {{baseUrl}}/api/sar/{{sarId}}
+Content-Type: application/json
+
+{
+  "suspicion": {
+    "description": "Additional investigation completed. Customer's explanation remains unsatisfactory. Recommend immediate submission to FinCEN for further review.",
+    "investigationNotes": "Follow-up call conducted. Customer became defensive and terminated call when asked about business purpose. No supporting documentation provided."
+  }
+}
+
+### Submit SAR for review (replace with actual ID)
+POST {{baseUrl}}/api/sar/{{sarId}}/submit
+
+### File SAR with regulatory authorities (replace with actual ID)
+POST {{baseUrl}}/api/sar/{{sarId}}/file
+Content-Type: application/json
+
+"FINCEN-2024-SAR-001234"
+
+### Delete SAR (only works for Draft status)
+DELETE {{baseUrl}}/api/sar/{{sarId}}
+
+### Get SARs with date filtering
+GET {{baseUrl}}/api/sar?createdAfter=2024-02-01T00:00:00Z&createdBefore=2024-02-28T23:59:59Z
+
+### Get SARs by customer name
+GET {{baseUrl}}/api/sar?customerName=Jane Smith
+
+### Get SARs by account number
+GET {{baseUrl}}/api/sar?accountNumber=ACC987654321

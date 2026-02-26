@@ -1,0 +1,50 @@
+{
+  "customer": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "middleName": "Michael",
+    "dateOfBirth": "1985-03-15T00:00:00Z",
+    "socialSecurityNumber": "123-45-6789",
+    "address": {
+      "street": "123 Main Street",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10001",
+      "country": "US"
+    },
+    "phoneNumber": "555-123-4567",
+    "emailAddress": "john.doe@email.com",
+    "accountNumber": "ACC123456789",
+    "customerType": "Individual"
+  },
+  "transactions": [
+    {
+      "transactionId": "TXN001",
+      "transactionDate": "2024-02-20T14:30:00Z",
+      "amount": 15000.0,
+      "transactionType": "Wire Transfer",
+      "description": "Large wire transfer to offshore account",
+      "counterpartyName": "ABC Holdings Ltd",
+      "counterpartyAccount": "987654321",
+      "counterpartyBank": "International Bank",
+      "location": "New York, NY"
+    },
+    {
+      "transactionId": "TXN002",
+      "transactionDate": "2024-02-21T09:15:00Z",
+      "amount": 9500.0,
+      "transactionType": "Cash Deposit",
+      "description": "Large cash deposit just under reporting threshold",
+      "location": "New York, NY"
+    }
+  ],
+  "suspicion": {
+    "primaryReason": "StructuredTransaction",
+    "additionalReasons": ["HighValueTransaction"],
+    "description": "Customer made multiple transactions just under the $10,000 reporting threshold within a short time period. This pattern suggests potential structuring to avoid currency transaction reporting requirements. The transactions lack clear business purpose and the customer was evasive when questioned about the source of funds.",
+    "suspicionIdentifiedDate": "2024-02-21T16:00:00Z",
+    "investigationNotes": "Customer has no history of large cash transactions. Employment records show annual income of $45,000, inconsistent with transaction amounts. Customer avoided eye contact and provided vague explanations when questioned.",
+    "priorSarsOnCustomer": false,
+    "regulatoryGuidanceReference": "31 CFR 1020.320"
+  }
+}

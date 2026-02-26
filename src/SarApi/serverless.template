@@ -1,0 +1,112 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "SAR API - Suspicious Activity Reports REST API",
+
+  "Parameters": {
+    "Environment": {
+      "Type": "String",
+      "Default": "dev",
+      "AllowedValues": ["dev", "staging", "prod"],
+      "Description": "Environment name"
+    }
+  },
+
+  "Globals": {
+    "Function": {
+      "Timeout": 30,
+      "MemorySize": 512,
+      "Runtime": "dotnet8",
+      "Environment": {
+        "Variables": {
+          "ASPNETCORE_ENVIRONMENT": { "Ref": "Environment" }
+        }
+      }
+    }
+  },
+
+  "Resources": {
+    "SarApiFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "CodeUri": ".",
+        "Handler": "SarApi",
+        "Events": {
+          "ProxyResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/{proxy+}",
+              "Method": "ANY"
+            }
+          },
+          "RootResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/",
+              "Method": "ANY"
+            }
+          }
+        },
+        "Policies": [
+          {
+            "DynamoDBCrudPolicy": {
+              "TableName": { "Ref": "SarTable" }
+            }
+          }
+        ],
+        "Environment": {
+          "Variables": {
+            "SAR_TABLE_NAME": { "Ref": "SarTable" }
+          }
+        }
+      }
+    },
+
+    "SarTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": { "Fn::Sub": "SARs-${Environment}" },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "Id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "Id",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        },
+        "SSESpecification": {
+          "SSEEnabled": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": { "Ref": "Environment" }
+          },
+          {
+            "Key": "Application",
+            "Value": "SAR-API"
+          }
+        ]
+      }
+    }
+  },
+
+  "Outputs": {
+    "ApiUrl": {
+      "Description": "API Gateway endpoint URL",
+      "Value": { "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/" }
+    },
+    "SarTableName": {
+      "Description": "DynamoDB table name for SARs",
+      "Value": { "Ref": "SarTable" }
+    }
+  }
+}
