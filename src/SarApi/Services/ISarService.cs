@@ -17,4 +17,6 @@ public interface ISarService
     Task<SuspiciousActivityReport?> SubmitSarAsync(string id);
 
     Task<SuspiciousActivityReport?> FileSarAsync(string id, string filingReference);
+
+    Task<SuspiciousActivityReport?> AssignSarAsync(string id, string assignedTo, string assignedBy, string? notes = null);
 }

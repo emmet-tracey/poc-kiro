@@ -36,6 +36,7 @@ builder.Services.AddScoped<ISarService, SarService>();
 // Add validators
 builder.Services.AddScoped<IValidator<CreateSarRequest>, CreateSarRequestValidator>();
 builder.Services.AddScoped<IValidator<UpdateSarRequest>, UpdateSarRequestValidator>();
+builder.Services.AddScoped<IValidator<AssignSarRequest>, AssignSarRequestValidator>();
 
 // Add FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<CreateSarRequestValidator>();

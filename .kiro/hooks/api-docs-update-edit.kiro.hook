@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "API Documentation Update - Edit",
+  "description": "Updates documentation when existing API-related files are modified",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*Controller.cs",
+      "*Models.cs",
+      "*Service.cs",
+      "*Validator.cs",
+      "Program.cs",
+      "Startup.cs"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "API files have been modified. Review the changes to controllers, models, services, or configuration files and update the README.md, API documentation, example files, and any relevant documentation to reflect the modifications. Ensure all changed endpoints are properly documented."
+  }
+}

@@ -53,6 +53,10 @@ public class SarSummary
     public int TransactionCount { get; set; }
 
     public decimal TotalAmount { get; set; }
+
+    public string? AssignedTo { get; set; }
+
+    public DateTime? AssignedAt { get; set; }
 }
 
 public class ApiResponse<T>
@@ -81,4 +85,12 @@ public class SarQueryParameters
     public int Limit { get; set; } = 50;
 
     public string? NextToken { get; set; }
+}
+
+public class AssignSarRequest
+{
+    [Required]
+    public string AssignedTo { get; set; } = string.Empty;
+
+    public string? Notes { get; set; }
 }

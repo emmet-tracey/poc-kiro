@@ -13,17 +13,20 @@ public class SarController : ControllerBase
     private readonly ISarService _sarService;
     private readonly IValidator<CreateSarRequest> _createValidator;
     private readonly IValidator<UpdateSarRequest> _updateValidator;
+    private readonly IValidator<AssignSarRequest> _assignValidator;
     private readonly ILogger<SarController> _logger;
 
     public SarController(
         ISarService sarService,
         IValidator<CreateSarRequest> createValidator,
         IValidator<UpdateSarRequest> updateValidator,
+        IValidator<AssignSarRequest> assignValidator,
         ILogger<SarController> logger)
     {
         _sarService = sarService;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
+        _assignValidator = assignValidator;
         _logger = logger;
     }
 
@@ -403,3 +406,71 @@ public class SarController : ControllerBase
         }
     }
 }
+
+    /// <summary>
+    /// Assigns a SAR to a specific user or team
+    /// </summary>
+    /// <param name="id">SAR ID</param>
+    /// <param name="request">Assignment request</param>
+    /// <returns>Updated SAR</returns>
+    [HttpPost("{id}/assign")]
+    [ProducesResponseType(typeof(ApiResponse<SuspiciousActivityReport>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 500)]
+    public async Task<ActionResult<ApiResponse<SuspiciousActivityReport>>> AssignSar(string id, [FromBody] AssignSarRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("Assigning SAR with ID: {SarId} to {AssignedTo}", id, request.AssignedTo);
+
+            var validationResult = await _assignValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Validation failed",
+                    Errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList()
+                });
+            }
+
+            // In a real application, you would get the current user from authentication context
+            // For now, we'll use a placeholder
+            var assignedBy = "system"; // TODO: Replace with actual authenticated user
+
+            var sar = await _sarService.AssignSarAsync(id, request.AssignedTo, assignedBy, request.Notes);
+            if (sar == null)
+            {
+                return NotFound(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = $"SAR with ID {id} not found"
+                });
+            }
+
+            return Ok(new ApiResponse<SuspiciousActivityReport>
+            {
+                Success = true,
+                Data = sar,
+                Message = $"SAR assigned to {request.AssignedTo} successfully"
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new ApiResponse<object>
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error assigning SAR with ID: {SarId}", id);
+            return StatusCode(500, new ApiResponse<object>
+            {
+                Success = false,
+                Message = "Internal server error occurred while assigning SAR"
+            });
+        }
+    }

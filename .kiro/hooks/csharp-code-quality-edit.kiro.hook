@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "C# Code Quality Check - Edit",
+  "description": "Runs code quality checks when existing C# files are modified",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.cs"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "C# files have been modified. Run `dotnet format` to ensure consistent formatting, then run `dotnet build` to check for compilation issues. Review the changes for best practices, proper error handling, and potential breaking changes. Fix any issues found."
+  }
+}

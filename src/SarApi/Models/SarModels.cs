@@ -50,6 +50,15 @@ public class SuspiciousActivityReport
 
     [DynamoDBProperty]
     public DateTime? FiledAt { get; set; }
+
+    [DynamoDBProperty]
+    public string? AssignedTo { get; set; }
+
+    [DynamoDBProperty]
+    public DateTime? AssignedAt { get; set; }
+
+    [DynamoDBProperty]
+    public string? AssignedBy { get; set; }
 }
 
 public class CustomerInformation

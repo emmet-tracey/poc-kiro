@@ -1,0 +1,18 @@
+{
+  "enabled": false,
+  "name": "Test Coverage Reminder",
+  "description": "Reminds to create tests when new business logic is added",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [
+      "*Service.cs",
+      "*Controller.cs",
+      "*Validator.cs"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "New business logic files have been created. Consider creating corresponding unit tests to ensure code quality and maintainability. Review the new functionality and suggest test cases that should be implemented to achieve good test coverage."
+  }
+}

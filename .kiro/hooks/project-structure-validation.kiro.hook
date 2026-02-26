@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Project Structure Validation",
+  "description": "Validates project structure and dependencies when project files are created or modified",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [
+      "*.csproj",
+      "*.sln",
+      "serverless.template",
+      "aws-lambda-tools-defaults.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Project configuration files have been created. Validate the project structure, check NuGet package versions for security vulnerabilities and compatibility, ensure AWS configuration is correct, and verify that all necessary dependencies are included. Update documentation if needed."
+  }
+}

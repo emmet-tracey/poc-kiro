@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Security Review",
+  "description": "Reviews security implications when sensitive files are created or modified",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [
+      "*Controller.cs",
+      "*Service.cs",
+      "*Validator.cs",
+      "Program.cs",
+      "appsettings*.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Security-sensitive files have been created. Review the code for potential security vulnerabilities including: input validation, authentication/authorization, data exposure, injection attacks, and secure configuration. Ensure sensitive data is not logged or exposed. Check that validation rules are comprehensive and error messages don't leak sensitive information."
+  }
+}

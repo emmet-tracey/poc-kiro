@@ -25,6 +25,7 @@ A REST API for generating and managing Suspicious Activity Reports (SARs) built 
 
 - `POST /api/sar/{id}/submit` - Submit SAR for review
 - `POST /api/sar/{id}/file` - File SAR with regulatory authorities
+- `POST /api/sar/{id}/assign` - Assign SAR to a user or team
 
 ## Technology Stack
 
@@ -47,6 +48,13 @@ Draft → Submitted → Filed
 - **SuspiciousActivityReport**: Main entity containing all SAR data
 - **CustomerInformation**: Customer details and identification
 - **TransactionDetail**: Individual transaction information
+- **SuspicionDetails**: Reason for suspicion and investigation notes
+
+### Assignment & Workflow
+
+- **AssignedTo**: User or team responsible for the SAR
+- **AssignedBy**: User who made the assignment
+- **AssignedAt**: Timestamp of assignment
 - **SuspicionDetails**: Reason for suspicion and investigation notes
 
 ## Validation Rules
@@ -128,6 +136,14 @@ curl "https://api-gateway-url/api/sar?status=Draft&limit=10"
 
 ```bash
 curl -X POST https://api-gateway-url/api/sar/{id}/submit
+```
+
+### Assign SAR to User
+
+```bash
+curl -X POST https://api-gateway-url/api/sar/{id}/assign \
+  -H "Content-Type: application/json" \
+  -d @examples/assign-sar-example.json
 ```
 
 ## Security Considerations

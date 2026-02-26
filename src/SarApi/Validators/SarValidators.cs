@@ -168,3 +168,19 @@ public class UpdateSarRequestValidator : AbstractValidator<UpdateSarRequest>
             .WithMessage("Status must be a valid SAR status");
     }
 }
+
+public class AssignSarRequestValidator : AbstractValidator<AssignSarRequest>
+{
+    public AssignSarRequestValidator()
+    {
+        RuleFor(x => x.AssignedTo)
+            .NotEmpty()
+            .MaximumLength(100)
+            .WithMessage("Assigned to is required and must be 100 characters or less");
+
+        RuleFor(x => x.Notes)
+            .MaximumLength(500)
+            .When(x => !string.IsNullOrEmpty(x.Notes))
+            .WithMessage("Notes must be 500 characters or less");
+    }
+}

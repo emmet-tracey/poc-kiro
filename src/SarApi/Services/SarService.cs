@@ -272,7 +272,44 @@ public class SarService : ISarService
             AccountNumber = sar.Customer.AccountNumber,
             PrimaryReason = sar.Suspicion.PrimaryReason,
             TransactionCount = sar.Transactions.Count,
-            TotalAmount = sar.Transactions.Sum(t => t.Amount)
+            TotalAmount = sar.Transactions.Sum(t => t.Amount),
+            AssignedTo = sar.AssignedTo,
+            AssignedAt = sar.AssignedAt
         };
     }
 }
+
+    public async Task<SuspiciousActivityReport?> AssignSarAsync(string id, string assignedTo, string assignedBy, string? notes = null)
+    {
+        _logger.LogInformation("Assigning SAR with ID: {SarId} to {AssignedTo} by {AssignedBy}", id, assignedTo, assignedBy);
+
+        var sar = await GetSarByIdAsync(id);
+        if (sar == null)
+        {
+            return null;
+        }
+
+        if (sar.Status == SarStatus.Filed)
+        {
+            throw new InvalidOperationException("Cannot assign a filed SAR");
+        }
+
+        sar.AssignedTo = assignedTo;
+        sar.AssignedBy = assignedBy;
+        sar.AssignedAt = DateTime.UtcNow;
+        sar.UpdatedAt = DateTime.UtcNow;
+
+        // If notes are provided, we could add them to investigation notes
+        if (!string.IsNullOrEmpty(notes))
+        {
+            var assignmentNote = $"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC] Assigned to {assignedTo} by {assignedBy}: {notes}";
+            sar.Suspicion.InvestigationNotes = string.IsNullOrEmpty(sar.Suspicion.InvestigationNotes)
+                ? assignmentNote
+                : $"{sar.Suspicion.InvestigationNotes}\n\n{assignmentNote}";
+        }
+
+        await _dynamoDbContext.SaveAsync(sar);
+
+        _logger.LogInformation("Assigned SAR with ID: {SarId} to {AssignedTo}", id, assignedTo);
+        return sar;
+    }

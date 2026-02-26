@@ -1,16 +1,16 @@
 {
   "enabled": true,
-  "name": "C# Code Quality Check",
-  "description": "Runs dotnet format and checks for linting issues when C# files are saved",
-  "version": "1",
+  "name": "C# Code Quality Check - Create",
+  "description": "Runs code quality checks when new C# files are created",
+  "version": "2",
   "when": {
-    "type": "fileEdited",
+    "type": "fileCreated",
     "patterns": [
       "*.cs"
     ]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Run `dotnet format` to format the code and `dotnet build` to check for any compilation or linting issues in the edited C# file. Fix any issues found."
+    "prompt": "New C# files have been created. Run `dotnet format` to ensure consistent formatting, then run `dotnet build` to check for compilation issues. Review the new code for best practices, proper error handling, and adherence to C# coding standards. Fix any issues found."
   }
 }

@@ -83,3 +83,20 @@ GET {{baseUrl}}/api/sar?customerName=Jane Smith
 
 ### Get SARs by account number
 GET {{baseUrl}}/api/sar?accountNumber=ACC987654321
+
+### Assign SAR to a user (replace with actual ID)
+POST {{baseUrl}}/api/sar/{{sarId}}/assign
+Content-Type: application/json
+
+{
+  "assignedTo": "john.investigator@company.com",
+  "notes": "High priority case - customer has history of suspicious transactions. Please review within 24 hours."
+}
+
+### Assign SAR without notes
+POST {{baseUrl}}/api/sar/{{sarId}}/assign
+Content-Type: application/json
+
+{
+  "assignedTo": "compliance.team@company.com"
+}
